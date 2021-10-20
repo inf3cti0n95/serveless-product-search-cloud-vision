@@ -1,0 +1,32 @@
+app: product-search
+service: cloudvision
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: 20201221
+  
+package:
+  patterns:
+    - cloudvision
+    - '!.git/**'
+
+functions:
+  cloudvision:
+    name: lambda-cloudvision
+    handler: cloudvision/handler.lambda_handler
+    environment:
+      product_set: f682741f19575f9d
+      project_id: acoustic-mix-324804
+      location: us-east1
+    events:
+      - http:
+          path: detect_image
+          method: post
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
